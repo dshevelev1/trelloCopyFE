@@ -1,0 +1,15 @@
+.boards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.board {
+    color: black;
+}
+
+.board:hover {
+    color: black;
+    border-top: 3px solid darkblue;
+}
