@@ -4,14 +4,14 @@ import Cookies from 'js-cookie'
 import { TOKEN_COOKIE_NAME } from '../index'
 import 'bootstrap/dist/js/bootstrap.min'
 
-function CreateBoardModal (): JSX.Element {
+function CreateTaskModal (props: any): JSX.Element {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
 
   const sendRequest = (): void => {
     /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
     $.ajax({
-      url: 'http://localhost:8000/api/boards',
+      url: 'http://localhost:8000/api/boards/'+props.boardId+'/columns/1/tasks',
       type: 'POST',
       crossDomain: true,
       beforeSend: function (xhr) {
@@ -24,8 +24,7 @@ function CreateBoardModal (): JSX.Element {
       }
     }).done(function (response: any): void {
       if (response.result === 'success') {
-        $('#createBoardModal').hide()
-        location.reload()
+        $('#createTaskModal').hide()
       } else {
         $('.alert-danger').removeClass('d-none')
       }
@@ -44,11 +43,11 @@ function CreateBoardModal (): JSX.Element {
     setDescription(event.target.value)
   }
 
-  return <div className="modal" id={'createBoardModal'} tabIndex={-1}>
+  return <div className="modal" id={'createTaskModal'} tabIndex={-1}>
     <div className="modal-dialog">
       <div className="modal-content">
         <div className="modal-header">
-          <h5 className="modal-title">New Board</h5>
+          <h5 className="modal-title">New Task</h5>
           <div className="alert alert-danger d-none" role="alert">
             Wrong data
           </div>
@@ -56,11 +55,11 @@ function CreateBoardModal (): JSX.Element {
         </div>
         <div className="modal-body">
           <label className={'text-start'}>
-            Board Name
+            Task Name
             <input type={'text'} className={'form-control'} placeholder={'Name'} onChange={onChangeName}/>
           </label>
           <label className={'text-start mt-2'}>
-            Board Description
+            Task Description
             <input type={'text'} className={'form-control'} placeholder={'Description'} onChange={onChangeDescription}/>
           </label>
         </div>
@@ -73,4 +72,4 @@ function CreateBoardModal (): JSX.Element {
   </div>
 }
 
-export default CreateBoardModal
+export default CreateTaskModal

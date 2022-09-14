@@ -9,7 +9,6 @@
     color: black;
 }
 
-.board:hover {
-    color: black;
-    border-top: 3px solid darkblue;
+.board:hover .card-header {
+    background: darkblue;
 }

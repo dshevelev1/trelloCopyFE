@@ -7,9 +7,9 @@ import LocalizedStrings from 'react-localization'
 import { useState } from 'react'
 import CreateBoardModal from './Modals/CreateBoardModal'
 import Cookies from 'js-cookie'
+import { authorized, TOKEN_COOKIE_NAME } from './index'
 
 const ENGLISH_LANG = 'en'; const RUSSIAN_LANG = 'ru'
-const TOKEN_COOKIE_NAME = 'jwt_token'
 
 const strings = new LocalizedStrings({
   en: {
@@ -36,6 +36,7 @@ const strings = new LocalizedStrings({
 
 function App (): JSX.Element {
   const [lang, setLang] = useState(ENGLISH_LANG)
+  const [update, processUpdate] = useState(1)
   const isActive = (link: string): string => {
     return useLocation().pathname === link ? 'active' : ''
   }
@@ -48,11 +49,8 @@ function App (): JSX.Element {
 
   const signout = (): void => {
     Cookies.remove(TOKEN_COOKIE_NAME)
-    setLang(lang)
-  }
-
-  const authorized = (): boolean => {
-    return typeof Cookies.get(TOKEN_COOKIE_NAME) !== 'undefined'
+    processUpdate(update * -1)
+    location.href = '/login'
   }
 
   const getLinks = (): JSX.Element[] => {

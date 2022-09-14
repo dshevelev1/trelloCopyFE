@@ -9,9 +9,24 @@ import NotFound from './Routes/NotFound'
 import EditProfile from './Routes/EditProfile'
 import Main from './Routes/Main'
 import BoardRoute from './Routes/BoardRoute'
+import Cookies from 'js-cookie'
+export const TOKEN_COOKIE_NAME = 'jwt_token'
+const DEFAULT_AUTH_PATH = 'login'
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 )
+
+export const authorized = (): boolean => {
+  return typeof Cookies.get(TOKEN_COOKIE_NAME) !== 'undefined'
+}
+
+function privateRoute (path: string, elem: JSX.Element): JSX.Element {
+  if (authorized()) {
+    return <Route path={path} element={elem} />
+  }
+
+  return <Route path={DEFAULT_AUTH_PATH} element={<Login />} />
+}
 
 root.render(
   <React.StrictMode>
@@ -21,9 +36,9 @@ root.render(
                 <Route path="/" element={<Welcome />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
-                <Route path='edit-profile' element={<EditProfile />} />
-                <Route path='main' element={<Main />} />
-                <Route path='board' element={<BoardRoute />} />
+                {privateRoute('edit-profile', <EditProfile />)}
+                {privateRoute('main', <Main />)}
+                {privateRoute('board', <BoardRoute />)}
                 <Route path='*' element={<NotFound />} />
               </Route>
           </Routes>
