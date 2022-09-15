@@ -6,12 +6,14 @@ import 'bootstrap/dist/js/bootstrap.min'
 
 function CreateTaskModal (props: any): JSX.Element {
   const [name, setName] = useState('')
+  const [status, setStatus] = useState('')
   const [description, setDescription] = useState('')
 
   const sendRequest = (): void => {
     /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
     $.ajax({
-      url: 'http://localhost:8000/api/boards/'+props.boardId+'/columns/1/tasks',
+      /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */
+      url: 'http://localhost:8000/api/boards/' + props.boardId + '/columns/1/tasks',
       type: 'POST',
       crossDomain: true,
       beforeSend: function (xhr) {
@@ -20,11 +22,13 @@ function CreateTaskModal (props: any): JSX.Element {
       },
       data: {
         name,
-        description
+        description,
+        status
       }
     }).done(function (response: any): void {
       if (response.result === 'success') {
         $('#createTaskModal').hide()
+        location.reload()
       } else {
         $('.alert-danger').removeClass('d-none')
       }
@@ -43,15 +47,19 @@ function CreateTaskModal (props: any): JSX.Element {
     setDescription(event.target.value)
   }
 
+  const onChangeStatus = (event: any): void => {
+    setStatus(event.target.value)
+  }
+
   return <div className="modal" id={'createTaskModal'} tabIndex={-1}>
     <div className="modal-dialog">
       <div className="modal-content">
         <div className="modal-header">
           <h5 className="modal-title">New Task</h5>
-          <div className="alert alert-danger d-none" role="alert">
-            Wrong data
-          </div>
           <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div className="alert alert-danger d-none" role="alert">
+          Wrong data
         </div>
         <div className="modal-body">
           <label className={'text-start'}>
@@ -61,6 +69,10 @@ function CreateTaskModal (props: any): JSX.Element {
           <label className={'text-start mt-2'}>
             Task Description
             <input type={'text'} className={'form-control'} placeholder={'Description'} onChange={onChangeDescription}/>
+          </label>
+          <label className={'text-start mt-2'}>
+            Task Status
+            <input type={'number'} className={'form-control'} placeholder={'(1 - todo, 2 - active, 3 - closed)'} onChange={onChangeStatus}/>
           </label>
         </div>
         <div className="modal-footer">

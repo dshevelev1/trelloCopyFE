@@ -1,11 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './css/board-route.css'
 import { Link } from 'react-router-dom'
 import CreateTaskModal from '../Modals/CreateTaskModal'
-import { URLSearchParams } from 'url'
+import Cookies from 'js-cookie'
+import { TOKEN_COOKIE_NAME } from '../index'
+import Task from '../Elements/Task'
+import $ from 'jquery'
 
 function BoardRoute (): JSX.Element {
-  const urlSearchParams = new URLSearchParams(location.search)
+  const urlParams = new URLSearchParams(location.search)
+  const boardId = urlParams.get('id')
+  const [todoTasks, setTodoTasks] = useState([])
+  const [activeTasks, setActiveTasks] = useState([])
+  const [closedTasks, setClosedTasks] = useState([])
+  const [firstTime, initFirstTime] = useState(true)
+
+  const updateTasks = (statusId: number): void => {
+    /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
+    $.ajax({
+      /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */
+      url: 'http://localhost:8000/api/boards/' + boardId + '/columns/' + statusId + '/tasks',
+      type: 'GET',
+      crossDomain: true,
+      beforeSend: function (xhr) {
+        /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */
+        xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.get(TOKEN_COOKIE_NAME))
+      }
+    }).done(function (response: any): void {
+      if (response.result === 'success') {
+        if (statusId === 1) {
+          setTodoTasks(response.tasks)
+        } else if (statusId === 2) {
+          setActiveTasks(response.tasks)
+        } else {
+          setClosedTasks(response.tasks)
+        }
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (firstTime) {
+      updateTasks(1)
+      updateTasks(2)
+      updateTasks(3)
+      initFirstTime(false)
+    }
+  })
 
   return <div>
         <Link to={'/main'}>
@@ -15,15 +56,30 @@ function BoardRoute (): JSX.Element {
         <div className={'column-container'}>
         <div className={'todo-column'}>
           <h3>TODO</h3>
+          <div>
+            { todoTasks.map(function (element: any, i: number) {
+              return <Task element={element} key={i} />
+            }) }
+          </div>
         </div>
         <div className={'active-column'}>
           <h3>Active</h3>
+          <div>
+            { activeTasks.map(function (element: any, i: number) {
+              return <Task element={element} key={i} />
+            }) }
+          </div>
         </div>
         <div className={'closed-column'}>
           <h3>Closed</h3>
+          <div>
+            { closedTasks.map(function (element: any, i: number) {
+              return <Task element={element} key={i} />
+            }) }
+          </div>
         </div>
         </div>
-      <CreateTaskModal boardId={urlSearchParams.get('id')}/>
+      <CreateTaskModal boardId={boardId}/>
       </div>
 }
 
