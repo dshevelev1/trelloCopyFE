@@ -1,0 +1,57 @@
+.column-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.column-container > div {
+    width: 33%;
+}
+
+.column-container > div > div {
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+
+
+.column-container > div > div::-webkit-scrollbar {
+    width: 3px;
+}
+
+.column-container > div > div::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 15px;
+    border: 5px solid transparent;
+}
+
+.column-container > div > div::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+}
+
+.column-container > div > div::-webkit-scrollbar-thumb:hover {
+    background: #1A284B;
+}
+
+.column-container > div.todo-column > div::-webkit-scrollbar-thumb {
+    background: orange;
+}
+
+.column-container > div.active-column > div::-webkit-scrollbar-thumb {
+    background: limegreen;
+}
+
+.column-container > div.closed-column > div::-webkit-scrollbar-thumb {
+    background: orangered;
+}
+
+.column-container > div.todo-column h3 {
+    background: orange;
+}
+
+.column-container > div.active-column h3 {
+    background: limegreen;
+}
+.column-container > div.closed-column h3 {
+    background: orangered;
+}

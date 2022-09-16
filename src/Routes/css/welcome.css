@@ -1,0 +1,14 @@
+.welcome-page {
+    margin-top: 10em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-page h1 {
+    font-size: 5em;
+}
+
+.welcome-page h1 > span {
+    color: #3b89fd;
+}

@@ -1,0 +1,14 @@
+.boards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    cursor: pointer;
+}
+
+.board {
+    color: black;
+}
+
+.board:hover .card-header {
+    background: darkblue;
+}
