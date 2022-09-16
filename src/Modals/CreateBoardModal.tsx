@@ -61,7 +61,7 @@ function CreateBoardModal (): JSX.Element {
           </label>
           <label className={'text-start mt-2'}>
             Board Description
-            <input type={'text'} className={'form-control'} placeholder={'Description'} onChange={onChangeDescription}/>
+            <textarea className={'form-control'} cols={23} placeholder={'Description'} onChange={onChangeDescription}></textarea>
           </label>
         </div>
         <div className="modal-footer">

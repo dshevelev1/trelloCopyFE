@@ -68,7 +68,7 @@ function CreateTaskModal (props: any): JSX.Element {
           </label>
           <label className={'text-start mt-2'}>
             Task Description
-            <input type={'text'} className={'form-control'} placeholder={'Description'} onChange={onChangeDescription}/>
+            <textarea className={'form-control'} cols={23} placeholder={'Description'} onChange={onChangeDescription}></textarea>
           </label>
           <label className={'text-start mt-2'}>
             Task Status
@@ -77,7 +77,7 @@ function CreateTaskModal (props: any): JSX.Element {
         </div>
         <div className="modal-footer">
           <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" className="btn btn-primary" onClick={sendRequest}>Create</button>
+          <button type="button" className="btn btn-primary ms-1" onClick={sendRequest}>Create</button>
         </div>
       </div>
     </div>

@@ -15,7 +15,13 @@ function BoardRoute (): JSX.Element {
   const [closedTasks, setClosedTasks] = useState([])
   const [firstTime, initFirstTime] = useState(true)
 
-  const updateTasks = (statusId: number): void => {
+  const updateAllTasks = (): void => {
+    updateTasksColumn(1)
+    updateTasksColumn(2)
+    updateTasksColumn(3)
+  }
+
+  const updateTasksColumn = (statusId: number): void => {
     /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
     $.ajax({
       /* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */
@@ -41,9 +47,7 @@ function BoardRoute (): JSX.Element {
 
   useEffect(() => {
     if (firstTime) {
-      updateTasks(1)
-      updateTasks(2)
-      updateTasks(3)
+      updateAllTasks()
       initFirstTime(false)
     }
   })
@@ -52,13 +56,18 @@ function BoardRoute (): JSX.Element {
         <Link to={'/main'}>
           <button className={'btn btn-primary mb-2'}>Go back</button>
         </Link>
-        <button className={'btn btn-info mb-2'} data-bs-toggle="modal" data-bs-target="#createTaskModal">Create task</button>
+        <button className={'btn btn-info mb-2 ms-1'} data-bs-toggle="modal" data-bs-target="#createTaskModal">Create task</button>
         <div className={'column-container'}>
         <div className={'todo-column'}>
           <h3>TODO</h3>
           <div>
             { todoTasks.map(function (element: any, i: number) {
-              return <Task element={element} key={i} />
+              return <Task
+                  element={element}
+                  boardId={boardId}
+                  updateTasks={updateAllTasks}
+                  key={i}
+              />
             }) }
           </div>
         </div>
@@ -66,7 +75,7 @@ function BoardRoute (): JSX.Element {
           <h3>Active</h3>
           <div>
             { activeTasks.map(function (element: any, i: number) {
-              return <Task element={element} key={i} />
+              return <Task element={element} boardId={boardId} updateTasks={updateAllTasks} key={i} />
             }) }
           </div>
         </div>
@@ -74,7 +83,7 @@ function BoardRoute (): JSX.Element {
           <h3>Closed</h3>
           <div>
             { closedTasks.map(function (element: any, i: number) {
-              return <Task element={element} key={i} />
+              return <Task element={element} boardId={boardId} updateTasks={updateAllTasks} key={i} />
             }) }
           </div>
         </div>
